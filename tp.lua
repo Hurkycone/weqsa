@@ -1,4 +1,4 @@
--- Function to teleport a random player to the executor of the script
+-- Function to teleport a random player to the script's parent's position
 local function teleportRandomPlayer()
     -- Get all players in the game
     local players = game:GetService("Players"):GetPlayers()
@@ -9,17 +9,13 @@ local function teleportRandomPlayer()
         local randomIndex = math.random(1, #players)
         local randomPlayer = players[randomIndex]
         
-        -- Teleport the random player to the executor of the script
-        randomPlayer.Character:MoveTo(script.Parent.Position)
-        
-        -- Notify the player they've been teleported
-        local notification = Instance.new("Message")
-        notification.Text = "You've been teleported!"
-        notification.Parent = randomPlayer.PlayerGui
-        
-        -- Optional: You can add a delay and then remove the notification
-        wait(3)
-        notification:Destroy()
+        -- Teleport the random player to the script's parent's position
+        local targetPosition = script.Parent.Position
+        if targetPosition then
+            randomPlayer.Character:MoveTo(targetPosition)
+        else
+            warn("Script parent does not have a position property.")
+        end
     else
         print("There are not enough players in the game.")
     end
